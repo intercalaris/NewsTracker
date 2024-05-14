@@ -3,7 +3,7 @@ from newsapi import NewsApiClient
 import pandas as pd
 import openpyxl
 
-newsapi = NewsApiClient(api_key='ad131bb2cd094aeeb1748bf2f2b5a24a')
+newsapi = NewsApiClient(api_key='API_KEY')
 
 previous_day_object = datetime.datetime.now() - datetime.timedelta(days=1)
 previous_day = previous_day_object.strftime('%Y-%m-%d')
