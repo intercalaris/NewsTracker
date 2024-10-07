@@ -2,8 +2,24 @@ import datetime
 from newsapi import NewsApiClient
 import pandas as pd
 import openpyxl
+import requests
+import os
+import dotenv
 
-newsapi = NewsApiClient(api_key='API_KEY')
+dotenv.load_dotenv()
+
+# now using get_everything() function instead of newsapi library
+def get_everything(api_key, params):
+    endpoint = "https://newsapi.org/v2/everything"
+    headers = {'Authorization': f'Bearer {api_key}'}
+    response = requests.get(endpoint, headers=headers, params=params)
+    return response.json()
+
+
+# API Key has limit of 100 calls a day. If new API needed, go to https://newsapi.org/ and click "get API key"
+api_key = os.getenv('NEWSAPI_KEY')
+if not api_key:
+    raise Exception("API key not found. Please set it in your environment variables or .env file.")
 
 previous_day_object = datetime.datetime.now() - datetime.timedelta(days=1)
 previous_day = previous_day_object.strftime('%Y-%m-%d')
@@ -12,12 +28,19 @@ past_day_backfill = '2024-04-09'
 from_date = previous_day
 to_date = previous_day
 
-all_articles = newsapi.get_everything(q='"Linguistics"',
-                                      language='en',
-                                      sort_by='publishedAt',
-                                      from_param=from_date,
-                                      to=to_date,
-                                      page_size=100)
+
+params = {
+    'q': 'Linguistics',
+    'language': 'en',
+    'sortBy': 'publishedAt',
+    'from': from_date,
+    'to': to_date,
+    'pageSize': 100
+}
+
+all_articles = get_everything(api_key, params)
+print(f"API Response: {all_articles['totalResults']} articles fetched from {len(all_articles['articles'])} sources.")
+
 
 # extract data into dictionary lists
 articles = []
