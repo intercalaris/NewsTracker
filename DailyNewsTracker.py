@@ -23,9 +23,9 @@ if not api_key:
 
 previous_day_object = datetime.datetime.now() - datetime.timedelta(days=1)
 previous_day = previous_day_object.strftime('%Y-%m-%d')
-past_day_backfill = '2024-04-09'
+past_day_backfill = '2024-09-10'
 
-from_date = previous_day
+from_date = past_day_backfill
 to_date = previous_day
 
 
